@@ -47,8 +47,6 @@ int main() {
         }
     }
 
-    // ---------------------------------------------
-
     int j;
     // for (i = 0; i < m; i++) {
     //     for (j = 0; j < m; j++) {
@@ -58,7 +56,7 @@ int main() {
     //     cout << "\n";
     // }
 
-    // cout << "PROCURANDO... \n";
+    // ---------------------------------------------
 
     stack<pair<int, int>> pilha;
     pilha.push(make_pair(0, 0));
@@ -69,6 +67,7 @@ int main() {
     int depth, curr;
     bool found;
 
+    int u, v, w, z, fir;
     while (!pilha.empty()) {
         top = pilha.top();
         depth = top.first;
@@ -79,39 +78,41 @@ int main() {
 
         res[depth++] = curr;
 
-        if (depth == m && graph[res[m - 1], 0]) {
-            if (m == 1) {
-                cout << o_edge[0].first.first + 1 << "\n";
-            } else {
-                int u = o_edge[0].first.first;
-                int v = o_edge[0].first.second;
-                int w = o_edge[1].first.first;
-                int x = o_edge[1].first.second;
+        if (depth != 1 && depth == m && graph[res[m - 1]][res[0]] == true) {
+            u = o_edge[res[0]].first.first;
+            v = o_edge[res[0]].first.second;
+            w = o_edge[res[1]].first.first;
+            x = o_edge[res[1]].first.second;
 
-                if (u == w || u == x) {
-                    cout << v + 1 << "\n";
-                } else {
-                    cout << u + 1 << "\n";
+            if (u == w || u == x) fir = v;
+            else fir = u;
+
+            y = o_edge[res[m - 1]].first.first;
+            z = o_edge[res[m - 1]].first.second;
+
+            if (fir == y || fir == z) {
+                cout << fir + 1 << "\n";
+                
+                for (i = m - 1; i > 0; i--) {
+                    cout << res[i] + 1 << " ";
                 }
-            }
 
-            for (i = 0; i < m - 1; i++) {
-                cout << res[i] + 1 << " ";
+                cout << res[0] + 1 << "\n";
+    
+                return 0;
             }
-
-            cout << res[m - 1] + 1 << "\n";
- 
-            break;
         }
 
         for (i = 0; i < m; i++) {
-            if (!graph[curr][i]) continue;
+            if (graph[curr][i] == false) continue;
 
             found = false;
             for (j = 0; j < depth; j++) {
-                if (res[j] == i) found = true;
+                if (res[j] == i) {
+                    found = true;
+                    break;
+                }
             }
-            
             if (found) continue;
 
             // cout << "\tEMPILHANDO: " << i << " | DEPTH: " << depth << "\n";
@@ -120,9 +121,7 @@ int main() {
         }
     }
 
-    if (depth != m) {
-        cout << "-1\n";
-    }
+    cout << "-1\n";
 
     return 0;
 }

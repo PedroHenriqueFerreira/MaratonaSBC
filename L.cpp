@@ -12,33 +12,14 @@ int main() {
 
     int matrix[NMAX][NMAX];
 
-    int temp;
     for (i = 0; i < n; i++) {
-        temp = i + 1;
-
         for (j = 0; j < n; j++) {
-            matrix[i][j] = temp;
-
-            if (temp == n) {
-                temp = 1;
-            } else {
-                temp++;
-            }
+            matrix[i][j] = i * n + j + 1;
         }
-    }
-    
-    cout << "-----------------------------\n";
-
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n - 1; j++) {
-            cout << matrix[i][j] << " ";
-        }
-
-        cout << matrix[i][n - 1] << "\n";
     }
 
     char x;
-    int a, b;
+    int a, b, temp;
     for (i = 0; i < t; i++) {
         cin >> x >> a >> b;
 
@@ -58,7 +39,16 @@ int main() {
         }
     }
 
-    cout << "--------------\n";
+    int x_pos, y_pos;
+    for (int i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            temp = matrix[i][j] - 1;
+            x_pos = temp / n;
+            y_pos = temp % n;
+
+            matrix[i][j] = matrix[x_pos][y_pos];
+        }
+    }
 
     for (i = 0; i < n; i++) {
         for (j = 0; j < n - 1; j++) {
@@ -68,15 +58,7 @@ int main() {
         cout << matrix[i][n - 1] << "\n";
     }
 
-    int x_pos;
-    for (int i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            temp = matrix[i][j] - 1;
-            x_pos = temp / n;
-
-            matrix[x_pos][temp % n] = matrix[i][j];
-        }
-    }
+    cout << "-----------------------------\n";
 
     bool error = false;
     set<int> group1, group2;
