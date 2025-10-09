@@ -27,22 +27,30 @@ int main() {
         o_edge[i] = make_pair(make_pair(x, y), c);
     }
 
-    bool graph[MAXN][MAXN];
-    memset(graph, false, sizeof(graph));
+    vector<int> graph[2 * MAXN];
+    pair<int, int> uv;
 
     for (i = 0; i < m; i++) {
-        pair<int, int> vertices = o_edge[i].first;
-        int color = o_edge[i].second;
+        uv = o_edge[i].first;
+        c = o_edge[i].second;
 
-        for (auto item : o_graph[vertices.first]) {
-            if (o_edge[item].second != color) {
-                graph[i][item] = true;
+        for (auto item : o_graph[uv.first]) {
+            if (o_edge[item].second != c) {
+                if (o_edge[item].first.first != uv.first) {
+                    graph[i].push_back(item);
+                } else {
+                    graph[i + m].push_back(item);
+                }
             }
         }
 
-        for (auto item : o_graph[vertices.second]) {
-            if (o_edge[item].second != color) {
-                graph[i][item] = true;
+        for (auto item : o_graph[uv.second]) {
+            if (o_edge[item].second != c) {
+                if (o_edge[item].first.first != uv.first) {
+                    graph[i].push_back(item);
+                } else {
+                    graph[i + m].push_back(item);
+                }
             }
         }
     }
@@ -128,7 +136,9 @@ int main() {
 
                 last = (a == c || a == d) ? b : a;
 
-                
+                if (last != e && last != f) {
+                    continue;
+                }
             }
 
             // cout << "\tEMPILHANDO: " << i << " | DEPTH: " << depth << "\n";
