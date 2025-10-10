@@ -15,7 +15,7 @@ int main() {
     pair<pair<int, int>, int> o_edge[MAXN];
 
     int i, j;
-    for (i = 0; i < m; i++) {
+    for (i = 0; i < m; i++) { // O(m)
         cin >> x >> y >> c;
 
         x--;
@@ -27,6 +27,13 @@ int main() {
         o_edge[i] = make_pair(make_pair(x, y), c);
     }
 
+    for (i = 0; i < n; i++) {
+        if (o_graph[i].size() % 2 != 0) {
+            cout << "-1\n";
+            return 0;
+        }
+    }
+
     vector<int> graph[2 * MAXN];
     pair<int, int> uv;
 
@@ -36,35 +43,25 @@ int main() {
 
         for (auto item : o_graph[uv.first]) {
             if (o_edge[item].second != c) {
-                if (o_edge[item].first.first != uv.first) {
-                    graph[i].push_back(item);
-                } else {
+                if (o_edge[item].first.first == uv.first) {
                     graph[i + m].push_back(item);
+                } else {
+                    graph[i + m].push_back(item + m);
                 }
             }
         }
 
         for (auto item : o_graph[uv.second]) {
             if (o_edge[item].second != c) {
-                if (o_edge[item].first.first != uv.first) {
+                if (o_edge[item].first.first == uv.second) {
                     graph[i].push_back(item);
                 } else {
-                    graph[i + m].push_back(item);
+                    graph[i].push_back(item + m);
                 }
             }
         }
     }
-
-    // for (i = 0; i < m; i++) {
-    //     for (j = 0; j < m; j++) {
-    //         cout << graph[i][j] << " ";
-    //     }
-
-    //     cout << "\n";
-    // }
-
-    // ---------------------------------------------
-
+    
     stack<pair<int, int>> pilha;
     pilha.push(make_pair(0, 0));
 
@@ -74,76 +71,45 @@ int main() {
     int depth, curr;
     bool found;
 
-    int a, b, d, e, f, g, h, first, last;
+    int a, b, d, e;
     while (!pilha.empty()) {
         top = pilha.top();
         depth = top.first;
         curr = top.second;
         pilha.pop();
 
-        // cout << "DESEMPILHANDO: " << curr << " | DEPTH: " << depth << "\n";
-
         res[depth++] = curr;
 
-        if (depth != 1 && depth == m && graph[res[m - 1]][res[0]] == true) {
-            a = o_edge[res[0]].first.first;
-            b = o_edge[res[0]].first.second;
-            c = o_edge[res[1]].first.first;
-            d = o_edge[res[1]].first.second;
-
-            first = (a == c || a == d) ? b : a;
-
-            e = o_edge[res[m - 1]].first.first;
-            f = o_edge[res[m - 1]].first.second;
-            g = o_edge[res[m - 2]].first.first;
-            h = o_edge[res[m - 2]].first.second;
-
-            last = (e == g || e == h) ? f : e;
-
-            if (first == last) {
-                cout << first + 1 << "\n";
+        if (depth > 1 && depth == m) {
+            a = res[m - 1] < m ? o_edge[res[m - 1]].first.first : o_edge[res[m - 1] - m].first.second;
+            b = res[m - 1] < m ? o_edge[res[m - 1]].first.second : o_edge[res[m - 1] - m].first.first;
+            d = res[0] < m ? o_edge[res[0]].first.first : o_edge[res[0] - m].first.second;
+            e = res[0] < m ? o_edge[res[0]].first.second : o_edge[res[0] - m].first.first;
+            
+            if (b == d && o_edge[res[0] % m].second != o_edge[res[m - 1] % m].second) {
+                cout << o_edge[res[0]].first.first + 1 << "\n";
                 
                 for (i = 0; i < m - 1; i++) {
-                    cout << res[i] + 1 << " ";
+                    cout << (res[i] % m) + 1 << " ";
                 }
 
-                cout << res[m - 1] + 1 << "\n";
-    
+                cout << (res[m - 1] % m) + 1 << "\n";
+
                 return 0;
             }
         }
 
-        for (i = 0; i < m; i++) {
-            if (graph[curr][i] == false) continue;
-
+        for (auto item : graph[curr]) {
             found = false;
             for (j = 0; j < depth; j++) {
-                if (res[j] == i) {
+                if ((res[j] % m) == (item % m)) {
                     found = true;
                     break;
                 }
             }
             if (found) continue;
 
-            if (depth > 1) { 
-                a = o_edge[res[depth - 1]].first.first;
-                b = o_edge[res[depth - 1]].first.second;
-                c = o_edge[res[depth - 2]].first.first;
-                d = o_edge[res[depth - 2]].first.second;
-
-                e = o_edge[i].first.first;
-                f = o_edge[i].first.second;
-
-                last = (a == c || a == d) ? b : a;
-
-                if (last != e && last != f) {
-                    continue;
-                }
-            }
-
-            // cout << "\tEMPILHANDO: " << i << " | DEPTH: " << depth << "\n";
-
-            pilha.push(make_pair(depth, i));
+            pilha.push(make_pair(depth, item));
         }
     }
 
