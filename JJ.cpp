@@ -69,9 +69,12 @@ int main() {
 
     pair<int, int> top;
     int depth, curr;
-    bool found;
 
     int a, b, d, e;
+
+    bool visited[MAXN];
+    memset(visited, false, sizeof(visited));
+
     while (!pilha.empty()) {
         top = pilha.top();
         depth = top.first;
@@ -87,9 +90,9 @@ int main() {
             e = res[0] < m ? o_edge[res[0]].first.second : o_edge[res[0] - m].first.first;
             
             if (b == d && o_edge[res[0] % m].second != o_edge[res[m - 1] % m].second) {
-                cout << o_edge[res[0]].first.first + 1 << "\n";
+                cout << o_edge[res[0]].first.first + 1 << '\n';
                 
-                for (i = 0; i < m - 1; i++) {
+                for (i = 0; i < m - 1; i++) {   
                     cout << (res[i] % m) + 1 << " ";
                 }
 
@@ -98,18 +101,16 @@ int main() {
                 return 0;
             }
         }
+    
+        memset(visited, false, sizeof(visited));   
+        for (i = 0; i < depth; i++) {
+            visited[res[i] % m] = true;
+        }
 
         for (auto item : graph[curr]) {
-            found = false;
-            for (j = 0; j < depth; j++) {
-                if ((res[j] % m) == (item % m)) {
-                    found = true;
-                    break;
-                }
+            if(visited[item % m] == false) {
+                pilha.push(make_pair(depth, item));
             }
-            if (found) continue;
-
-            pilha.push(make_pair(depth, item));
         }
     }
 
