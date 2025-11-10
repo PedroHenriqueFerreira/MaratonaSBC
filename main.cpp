@@ -6,63 +6,55 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     
-    int n;
+    int n, m;
+
+    int total_n = 0, total_m = 0;
+
     cin >> n;
-
-    int list[n];
-
-    int total = 0;
-
+    vector<int> v(n);
     for (int i = 0; i < n; i++) {
-        cin >> list[i];
+        cin >> v[i];
+        total_n += v[i];
+    } 
 
-        total += list[i];
+    cin >> m;
+    vector<int> w(m);
+    for (int i = 0; i < m; i++) {
+        cin >> w[i];
+        total_m += w[i];
     }
 
-    if (total % 3 != 0) {
-        cout << "0\n";
+    if (total_n != total_m) {
+        cout << "N\n";
         return 0;
     }
 
-    int size = total / 3;
-
-    int list_acc[n];
-
-    unordered_map<int, int> hash;
-
-    list_acc[0] = list[0];
-    hash[list[0]] = 0;
-
-    for (int i = 1; i < n; i++) {
-        list_acc[i] = list_acc[i - 1] + list[i];
-        hash[list_acc[i]] = i;
-    } 
-
-    int buscando;
-
-    unordered_map<int, bool> finaliza;
-
-    int triangulos = 0;
-
-    for (int i = 0; i < n; i++) {
-        if (list_acc[i] >= size) {
-            buscando = list_acc[i] - size;
-
-            if (buscando == 0) {
-                
-            } else {
-                if (hash.count(buscando) != 0) {
-                    if (finaliza.count(hash[buscando]) != 0 && finaliza[hash[buscando]] == true) {
-                        triangulos += 1;
-                    }
-
-                    finaliza[i] = true;
-                }
-            }
+    if (m == 1) {
+        if (total_n == w[0]) {
+            cout << "S\n";
+        } else {
+            cout << "N\n";
         }
+
+        return 0;
+    } else if (n == m) {
+        bool is_equal = true, is_reverse = true;
+
+        for (int i = 0; i < n; i ++) {
+            if (v[i] != w[i]) is_equal = false;
+            if (v[i] != w[n - i - 1]) is_reverse = false;
+        }
+
+        if (is_equal || is_reverse) {
+            cout << "S\n";
+        } else {
+            cout << "N\n";
+        }
+
+        return 0;
     }
 
-    cout << triangulos << "\n";
+    cout << "OLA MUNDO\n";
 
     return 0;
 }
