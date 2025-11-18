@@ -1,18 +1,28 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main() {
-    string s;
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
 
-    cin >> s;
+    int a, b, c;
+    
+    cin >> a >> b >> c;
 
-    int i;
-    for (i = s.size() - 1; i > 0; i--) {
-        if (s[i] <= s[i - 1]) break;
+    if (a + b + c == 3 || a + b + c == 0) {
+        cout << "*\n";
+
+        return 0;
     }
 
-    cout << i << "\n";
+    if ((a == 0 && b == 0 && c == 1) || (a == 1 && b == 1 && c == 0)) {
+        cout << "C\n";
+    } else if ((a == 0 && b == 1 && c == 0) || (a == 1 && b == 0 && c == 1)) {
+        cout << "B\n";
+    } else {
+        cout << "A\n";
+    }
 
     return 0;
 }

@@ -1,64 +1,68 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
-using namespace std;
+using namespace std; 
 
 int main() {
-    int k, n;
-    char res[n];
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    
+    int n;
+    cin >> n;
 
-    cin >> k >> n;
+    int list[n];
 
-    float p = (float) n / k;
+    int total = 0;
 
-    if (p > 3 || p < 1 || (p < 2 && (n % k) != k - 1)) {
-        cout << "*\n"; 
+    for (int i = 0; i < n; i++) {
+        cin >> list[i];
+
+        total += list[i];
+    }
+
+    if (total % 3 != 0) {
+        cout << "0\n";
         return 0;
     }
 
-    if (p < 2 || abs(p - 2) < 1e-9) {
-        for (int i = 0; i < n; i++) {
-            if (i % 2 == 0) {
-                cout << "X";
+    int size = total / 3;
+
+    int list_acc[n];
+
+    unordered_map<int, int> hash;
+
+    list_acc[0] = list[0];
+    hash[list[0]] = 0;
+
+    for (int i = 1; i < n; i++) {
+        list_acc[i] = list_acc[i - 1] + list[i];
+        hash[list_acc[i]] = i;
+    } 
+
+    int buscando;
+
+    unordered_map<int, bool> finaliza;
+
+    int triangulos = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (list_acc[i] >= size) {
+            buscando = list_acc[i] - size;
+
+            if (buscando == 0) {
+                
             } else {
-                cout << "-";
+                if (hash.count(buscando) != 0) {
+                    if (finaliza.count(hash[buscando]) != 0 && finaliza[hash[buscando]] == true) {
+                        triangulos += 1;
+                    }
+
+                    finaliza[i] = true;
+                }
             }
         }
-        cout << "\n";
-        return 0;
     }
 
-    if (p > 2 && floor(n / k) == k) {
-        for (int i = 0; i < n; i++) {
-            if (i % 2 == 0) {
-                cout << "-";
-            } else {
-                cout << "X";
-            }
-        }
-        cout << "\n";
-        return 0;
-    }
-
-    if (abs(p - 3) < 1e-9) {
-        for (int i = 0; i < ceil(n / 3); i++) {
-            cout << "-X-";
-        }
-        cout << "\n";
-        return 0;
-    }
-
-    int resto = n % k;
-    int pares = k - resto;
- 
-    for (int i = 0; i < pares; i++) {
-        cout << "X-";
-    }
-
-    for (int i = 0; i < resto; i++) {
-       cout << "-X-"; 
-    }
-
-    cout << "\n";
+    cout << triangulos << "\n";
 
     return 0;
 }
