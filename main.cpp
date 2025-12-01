@@ -121,6 +121,8 @@ int main() {
     }
 
     if (dir == norte || dir == sul || esq == norte || esq == sul || norte == sul || esq == dir) {
+        // cout << "AQUI " << sul.first << " " << sul.second << "\n";
+
         largura += k;
         altura += k;
         cout << largura * altura << "\n";
@@ -171,6 +173,8 @@ int main() {
         }
     }
 
+    // cout << "CASO 1: " << largura_1 << ", " << altura_1 << "\n";
+
     long long int largura_2 = largura, altura_2 = altura;
     for (int i = 0; i < k; i++) {
         if (largura_2 > altura_2) {
@@ -179,6 +183,8 @@ int main() {
             largura_2++;
         }
     }
+
+    // cout << "CASO 2: " << largura_2 << ", " << altura_2 << "\n";
 
     long long int largura_3 = largura, altura_3 = altura;
     if (prox != norte && prox != sul && prox != esq && prox != dir && prox_dist < k) {
@@ -212,6 +218,8 @@ int main() {
             altura_3 += k;
         }
     }
+
+    // cout << "CASO 3: " << largura_3 << ", " << altura_3 << "\n";
 
     long long int res = max(largura_1 * altura_1, max(largura_2 * altura_2, largura_3 * altura_3));
 
