@@ -58,8 +58,6 @@ void factorization(unsigned long long int value, int size) {
             teste *= pow(par.first, par.second);
         }
 
-        cout << "ALVO: " << teste;
-
         exit(0);
     }
 }
